@@ -9,15 +9,15 @@
 <body>
     <div style="text-align: center;">
         <div>
-            <img id="previewImage" width="200">
+            <img id="preview-image" width="200" alt="source image">
         </div>
         <br>
         <div>
-            <input type="file" accept="image/*" id="inputFile" onchange="handleInputFile(this.files[0])">
+            <input type="file" accept="image/*" id="input-file" onchange="handleInputFile(this.files[0])">
         </div>
         <br>
         <h3>Found Replica:</h3>
-        <div id="similarImages"></div>
+        <div id="similar-images"></div>
     </div>
 
     <script>
@@ -27,7 +27,7 @@
                 // get image data
                 const imageData = reader.result;
                 // set image in preview
-                const previewImage = document.getElementById("previewImage");
+                const previewImage = document.getElementById("preview-image");
                 previewImage.src = imageData;
                 // fetch similar images
                 const imgs = await fetchSimilarImages(imageData);
@@ -60,7 +60,7 @@
         function updateSimilarImagesDOM(images) {
             return new Promise((resolve) => {
                 // reset similar images containes
-                const domSimilarImages = document.getElementById("similarImages");
+                const domSimilarImages = document.getElementById("similar-images");
                 while (domSimilarImages.firstChild) {
                     domSimilarImages.removeChild(domSimilarImages.firstChild);
                 }

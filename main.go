@@ -92,7 +92,19 @@ func searchSimilarImages(dbRecords []dbRecord, data []byte) ([]similarImage, err
 	hashStr := getHash(data)
 	simImages := []similarImage{}
 	for _, record := range dbRecords {
-		if record.Hash == hashStr {
+		// change hash similarity checking by using levenshtein distance
+		// strings are considered similar if their levenshtein distance is less than or equal to 5
+
+		// old
+		// if record.Hash == hashStr {
+		// 	simImages = append(simImages, similarImage{
+		// 		FileName:        record.FileName,
+		// 		SimilarityScore: 100.0,
+		// 	})
+		// }
+
+		//new
+		if DistanceTwoStrings(record.Hash, hashStr) <= 5 {
 			simImages = append(simImages, similarImage{
 				FileName:        record.FileName,
 				SimilarityScore: 100.0,

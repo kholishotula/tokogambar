@@ -1,13 +1,17 @@
 package main
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"image"
+	"image/jpeg"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+
+	"github.com/corona10/goimagehash"
 )
 
 const addr = ":7124"
@@ -45,11 +49,28 @@ func main() {
 			WriteAPIResp(w, NewErrorResp(err))
 			return
 		}
-		similarImages, err := searchSimilarImages(dbRecords, imgData)
+
+		// change similar image searching method by using perceptual hash
+
+		// old
+		// similarImages, err := searchSimilarImages(dbRecords, imgData)
+		// if err != nil {
+		// 	WriteAPIResp(w, NewErrorResp(err))
+		// 	return
+		// }
+
+		// new
+		img, _, err := image.Decode(bytes.NewReader(imgData))
 		if err != nil {
 			WriteAPIResp(w, NewErrorResp(err))
 			return
 		}
+		similarImages, err := searchSimilarImages(dbRecords, img)
+		if err != nil {
+			WriteAPIResp(w, NewErrorResp(err))
+			return
+		}
+
 		// output success response
 		WriteAPIResp(w, NewSuccessResp(similarImages))
 	})
@@ -76,20 +97,42 @@ func loadDB() ([]dbRecord, error) {
 	}
 	var dbRecords []dbRecord
 	for _, filename := range filenames {
-		b, err := ioutil.ReadFile(basePath + "/" + filename)
+		// old
+		// b, err := ioutil.ReadFile(basePath + "/" + filename)
+
+		// new
+		file, err := os.Open(basePath + "/" + filename)
+		if err != nil {
+			continue
+		}
+		defer file.Close()
+
+		imageFile, err := jpeg.Decode(file)
+		if err != nil {
+			continue
+		}
+
+		imageHash, err := getImageHash(imageFile)
 		if err != nil {
 			continue
 		}
 		dbRecords = append(dbRecords, dbRecord{
 			FileName: filename,
-			Hash:     getHash(b),
+			Hash:     imageHash,
 		})
 	}
 	return dbRecords, nil
 }
 
-func searchSimilarImages(dbRecords []dbRecord, data []byte) ([]similarImage, error) {
-	hashStr := getHash(data)
+func searchSimilarImages(dbRecords []dbRecord, img image.Image) ([]similarImage, error) {
+	// old
+	// hashStr := getHash(data)
+
+	// new
+	hashStr, err := getImageHash(img)
+	if err != nil {
+		return nil, err
+	}
 	simImages := []similarImage{}
 	for _, record := range dbRecords {
 		// change hash similarity checking by using levenshtein distance
@@ -114,9 +157,22 @@ func searchSimilarImages(dbRecords []dbRecord, data []byte) ([]similarImage, err
 	return simImages, nil
 }
 
-func getHash(data []byte) string {
-	h := sha256.New()
-	h.Write(data)
+// function to get image hash (in string) using phash
 
-	return hex.EncodeToString(h.Sum(nil))
+// old
+// func getHash(data []byte) string {
+// 	h := sha256.New()
+// 	h.Write(data)
+
+// 	return hex.EncodeToString(h.Sum(nil))
+// }
+
+// new
+func getImageHash(image image.Image) (string, error) {
+	imageHash, err := goimagehash.PerceptionHash(image)
+	if err != nil {
+		return "", err
+	}
+
+	return imageHash.ToString(), nil
 }

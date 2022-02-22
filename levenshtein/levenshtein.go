@@ -1,4 +1,4 @@
-package main
+package levenshtein
 
 func DistanceTwoStrings(string1, string2 string) int {
 	str1rune := []rune(string1)

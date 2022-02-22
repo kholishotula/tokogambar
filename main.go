@@ -12,6 +12,7 @@ import (
 	"os"
 
 	"github.com/corona10/goimagehash"
+	"github.com/riandyrn/tokogambar/levenshtein"
 )
 
 const addr = ":7124"
@@ -147,7 +148,7 @@ func searchSimilarImages(dbRecords []dbRecord, img image.Image) ([]similarImage,
 		// }
 
 		//new
-		if DistanceTwoStrings(record.Hash, hashStr) <= 5 {
+		if levenshtein.DistanceTwoStrings(record.Hash, hashStr) <= 5 {
 			simImages = append(simImages, similarImage{
 				FileName:        record.FileName,
 				SimilarityScore: 100.0,

@@ -15,6 +15,7 @@ COPY --from=build /build/tokogambar /app/
 COPY web/ app/web
 COPY images/ app/images
 COPY input/ app/input
+COPY .env /app
 WORKDIR /app
 
 ENTRYPOINT [ "./tokogambar" ]

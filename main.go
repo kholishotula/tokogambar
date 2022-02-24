@@ -12,17 +12,24 @@ import (
 	"os"
 
 	"github.com/corona10/goimagehash"
+	"github.com/joho/godotenv"
 	"github.com/riandyrn/tokogambar/levenshtein"
 )
 
-const addr = ":8080"
-
 func main() {
+	// load env
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
 	// initialize database
 	dbRecords, err := loadDB()
 	if err != nil {
 		log.Fatalf("unable to initialize database due: %v", err)
 	}
+
 	// attach handler
 	http.Handle("/", http.FileServer(http.Dir("./web")))
 	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("./images"))))
@@ -76,8 +83,8 @@ func main() {
 		WriteAPIResp(w, NewSuccessResp(similarImages))
 	})
 	// start server
-	log.Printf("server is listening on %v", addr)
-	err = http.ListenAndServe(addr, nil)
+	log.Printf("server is listening on %v", os.Getenv("PORT"))
+	err = http.ListenAndServe(":"+os.Getenv("PORT"), nil)
 	if err != nil {
 		log.Fatalf("unable to start server due: %v", err)
 	}

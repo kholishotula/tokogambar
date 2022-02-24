@@ -77,7 +77,6 @@ func main() {
 	})
 	// start server
 	log.Printf("server is listening on %v", addr)
-	addr := os.Getenv("PORT")
 	err = http.ListenAndServe(addr, nil)
 	if err != nil {
 		log.Fatalf("unable to start server due: %v", err)

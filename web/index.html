@@ -72,7 +72,7 @@
                 images.forEach((value) => {
                     const node = document.createElement('div');
                     node.innerHTML = `
-                        <img src="/images/${value.filename}" width="200">
+                        <img src="./images/${value.filename}" width="200">
                         <p>${value.filename}</p>
                     `
                     domSimilarImages.appendChild(node);

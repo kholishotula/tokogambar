@@ -15,7 +15,7 @@ import (
 	"github.com/riandyrn/tokogambar/levenshtein"
 )
 
-const addr = ":0"
+const addr = ":8080"
 
 func main() {
 	// initialize database

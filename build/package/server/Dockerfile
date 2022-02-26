@@ -1,12 +1,12 @@
 FROM golang:1.17.7-alpine3.15 as build
 WORKDIR /go/src/github.com/riandyrn/tokogambar
 
-COPY go.mod go.sum .env ./
+ADD go.mod go.sum .env ./
 RUN go mod download
 
-COPY ./cmd ./cmd
-COPY ./internal ./internal
-COPY ./static ./static
+ADD ./cmd ./cmd
+ADD ./internal ./internal
+ADD ./static ./static
 
 WORKDIR /go/src/github.com/riandyrn/tokogambar/cmd/server
 RUN go build -o server

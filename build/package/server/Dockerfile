@@ -1,21 +1,21 @@
 FROM golang:1.17.7-alpine3.15 as build
+WORKDIR /go/src/github.com/riandyrn/tokogambar
 
-RUN mkdir /build
-COPY go.mod go.sum error.go main.go model.go /build/
-COPY levenshtein /build/levenshtein
-
-WORKDIR /build
+COPY go.mod go.sum .env ./
 RUN go mod download
 
-RUN go build
+COPY ./cmd ./cmd
+COPY ./internal ./internal
+COPY ./static ./static
 
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
-COPY --from=build /build/tokogambar /app/
-COPY web/ app/web
-COPY images/ app/images
-COPY input/ app/input
-COPY .env /app
-WORKDIR /app
+WORKDIR /go/src/github.com/riandyrn/tokogambar/cmd/server
+RUN go build -o server
 
-ENTRYPOINT [ "./tokogambar" ]
+FROM alpine:3.15
+RUN apk add ca-certificates
+COPY --from=build /go/src/github.com/riandyrn/tokogambar/cmd/server .
+COPY ./cmd/server .
+COPY .env .
+COPY ./static ./static
+
+ENTRYPOINT [ "./server" ]

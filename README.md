@@ -6,11 +6,11 @@ Ketika seorang penjual ingin menjual gambarnya, pihak `TokoGambar` akan melakuka
 
 Jika gambar tersebut adalah replika, maka gambar tersebut akan ditolak oleh pihak `TokoGambar`.
 
-Suatu gambar dikatakan replika dari gambar lain jika gambar tersebut terlihat sama persis secara visual dengan gambar yang direferensikan. Contoh kasusnya adalah [input_1.jpg](./input/input_1.jpg) & [input_3.jpg](./input/input_3.jpg):
+Suatu gambar dikatakan replika dari gambar lain jika gambar tersebut terlihat sama persis secara visual dengan gambar yang direferensikan. Contoh kasusnya adalah [input_1.jpg](./static/input/input_1.jpg) & [input_3.jpg](./static/input/input_3.jpg):
 
-[<img src="./input/input_1.jpg" width="400"/>](./input/input_1.jpg) 
+[<img src="./static/input/input_1.jpg" width="400"/>](./static/input/input_1.jpg) 
 
-[<img src="./input/input_3.jpg" width="400"/>](./input/input_3.jpg)
+[<img src="./static/input/input_3.jpg" width="400"/>](./static/input/input_3.jpg)
 
 Resolusi dari kedua gambar ini berbeda, namun keduanya memiliki visual yang kurang lebih sama. Karena itulah kedua gambar ini dikatakan sebagai replika antara satu sama lain.
 
@@ -30,6 +30,10 @@ Coba pikirkan hal-hal apa saja yang perlu diperbaiki dari sudut pandang bisnis `
 4. Implementasikan solusi dari masalah yang kamu temukan.
 5. Tuliskan juga di `README.md` hal apa saja yang akan kamu lakukan jika kamu punya waktu lebih banyak untuk mengerjakan tantangan ini.
 6. Bagikan link repositori hasil fork beserta CV kamu kepada kami.
+
+## Solusi
+
+Solusi tantangan yang saya tawarkan dapat dilihat secara lengkap pada [solusi.md](./solusi.md)
 
 ## Menjalankan Program
 
